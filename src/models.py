@@ -2,7 +2,6 @@ import torch.nn.functional as F
 import lightning as L
 import torch
 import torchmetrics
-import torchvision
 
 class PetModel(torch.nn.Module):
     def __init__(self, model_name:str, 

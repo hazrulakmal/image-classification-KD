@@ -25,7 +25,6 @@ class PetDataModule(L.LightningDataModule):
         self.train_size = split_size
         self.train_transform = train_transform
         self.test_transform = test_transform
-        self.height_width = height_width
         self.num_workers = num_workers
         self.seed=seed
         self.api_key = api_key
@@ -34,25 +33,24 @@ class PetDataModule(L.LightningDataModule):
         # download (will run once to download the data)
         datasets.OxfordIIITPet(root=self.data_dir,target_types="category", download=True)
 
-        if self.height_width is None:
-            self.height_width = (32, 32)
-        
         # transformations
         if self.train_transform is None:
-            self.train_transform = transforms.Compose(
-                [
-                    transforms.Resize(self.height_width),
-                    transforms.ToTensor(),
-                ]
-            )
+            self.train_transform =  transforms.Compose([
+                transforms.Resize(256, interpolation=transforms.InterpolationMode.BILINEAR),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
+            ])
 
         if self.test_transform is None:
-            self.test_transform = transforms.Compose(
-                [
-                    transforms.Resize(self.height_width),
-                    transforms.ToTensor(),
-                ]
-            )
+            self.test_transform = transforms.Compose([
+                transforms.Resize(256, interpolation=transforms.InterpolationMode.BILINEAR),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
+            ])
 
     def setup(self, stage: str):
         self.data_test = datasets.OxfordIIITPet(

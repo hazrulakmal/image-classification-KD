@@ -23,3 +23,4 @@ make train.py outside files
 breakdown utils_helpers.py into smaller components and move them to src folder
 
 1. you can fill up cli arguments using yaml file or python!
+2. models must met the image preprocessing requirements
