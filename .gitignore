@@ -1,2 +1,5 @@
 datasets
-training/secrets.json
+*__pycache__
+*wandb
+secrets.json
+cli.py

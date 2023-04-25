@@ -5,3 +5,7 @@ ruff # for python 2.7 python liter to higlight syntactical and stylistic problem
 black # code formatter
 
 #Dependency Management
+wandb # for tracking experiments
+lightning
+torchvision
+pytorch-lightning[extra]
