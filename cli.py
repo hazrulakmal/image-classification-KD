@@ -15,32 +15,11 @@ args = {
         #"max_epochs": 2,
     },
     
-    "model": {
-        "class_path": "src.training.LightningTraining",
-        "init_args": {
-            "model_name": "resnet18",
-            "dropout_rates": 0.4,
-            "learning_rate": 0.01,
-            "momentum": 0.9,
-            "nesterov": True,
-            "weight_decay":1e-3,
-            "T_max": 10
-        }
-    },
-
-    "data": {
-        "batch_size": 16,
-        "num_workers": os.cpu_count(),
-    },
-
-    # "model" : {
-    #     "class_path": "src.training.DistilledTraining",
+    # "model": {
+    #     "class_path": "src.training.LightningTraining",
     #     "init_args": {
     #         "model_name": "resnet18",
-    #         "teacher_model_name": "resnet50",
-    #         "artifact_path": "resnet50-vanilla:latest",
-    #         "alpha": 0.5,
-    #         "temperature": 2.0,
+    #         "dropout_rates": 0.4,
     #         "learning_rate": 0.01,
     #         "momentum": 0.9,
     #         "nesterov": True,
@@ -48,6 +27,28 @@ args = {
     #         "T_max": 10
     #     }
     # },
+
+    "data": {
+        "batch_size": 16,
+        "num_workers": os.cpu_count(),
+    },
+
+    "model" : {
+        "class_path": "src.training.DistilledTraining",
+        "init_args": {
+            "model_name": "resnet18",
+            "teacher_model_name": "resnet152",
+            "artifact_path": "st311-project/image-classification-KD/model-yb0ip530:v0",
+            "dropout_rates": 0.4,
+            "alpha": 0.5,
+            "temperature": 2.0,
+            "learning_rate": 0.01,
+            "momentum": 0.9,
+            "nesterov": True,
+            "weight_decay":1e-3,
+            "T_max": 10
+        }
+    },
 }
 
 if __name__ == "__main__":

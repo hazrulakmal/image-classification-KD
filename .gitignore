@@ -3,3 +3,4 @@ datasets
 *wandb
 secrets.json
 image-classification-KD
+cli.py
