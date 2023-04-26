@@ -20,6 +20,7 @@ class LightningTraining(L.LightningModule):
         model=None, 
         model_name:str = "resnet18",
         num_classes:int = 37,
+        dropout_rates:float=0.5,
         learning_rate:float = 0.01,
         momentum: float = 0.9,
         weight_decay: float = 0.0001,
@@ -37,13 +38,14 @@ class LightningTraining(L.LightningModule):
 
         if model is None:
             self.model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="DEFAULT")
-            self.model.fc = torch.nn.Linear(self.model.fc.in_features, num_classes)
+            in_features = self.model.fc.in_features
+            self.model.fc = self._add_layers(in_features, int(in_features/2), self.hparams.num_classes, self.hparams.dropout_rates)
         else:
             self.model = model
             
-        self.train_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
-        self.val_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
-        self.test_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
+        self.train_acc = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
+        self.val_acc = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
+        self.test_acc = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
 
     def forward(self, x):
         return self.model(x)
@@ -87,6 +89,15 @@ class LightningTraining(L.LightningModule):
         sch = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.hparams.T_max)
         return [optimizer], [sch]
     
+    def _add_layers(self, in_features, hidden_units, num_classes, dropout_rates):
+        new_layers = torch.nn.Sequential(
+            torch.nn.Linear(in_features, hidden_units),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(dropout_rates),
+            torch.nn.Linear(hidden_units, num_classes),
+        )
+        return new_layers
+    
 class DistilledTraining(LightningTraining, L.LightningModule):
     def __init__(
         self, 
@@ -97,6 +108,7 @@ class DistilledTraining(LightningTraining, L.LightningModule):
         artifact_path:str = "resnet50-vanilla:latest",
         alpha:float=0.5, 
         temperature:float=2.0,
+        dropout_rates:float=0.5,
         learning_rate:float = 0.01,
         momentum: float = 0.9,
         weight_decay: float = 0.0001,
@@ -112,7 +124,8 @@ class DistilledTraining(LightningTraining, L.LightningModule):
 
         if model is None:
             self.model = self.model = torch.hub.load('pytorch/vision:v0.13.0', self.model_name, weights="DEFAULT")
-            self.model.fc = torch.nn.Linear(self.model.fc.in_features, num_classes)
+            in_features = self.model.fc.in_features
+            self.model.fc = self._add_layers(in_features, int(in_features/2), self.hparams.num_classes, self.hparams.dropout_rates)
         else:
             self.model = model
 
@@ -122,9 +135,9 @@ class DistilledTraining(LightningTraining, L.LightningModule):
         else:
             self.teacher_model = teacher_model
 
-        self.train_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
-        self.val_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
-        self.test_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
+        self.train_acc = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
+        self.val_acc = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
+        self.test_acc = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
 
     def training_step(self, batch, batch_idx):
         features, true_labels = batch
@@ -153,7 +166,7 @@ class DistilledTraining(LightningTraining, L.LightningModule):
         return loss
     
     def _fetch_model_artifact(self, artifact_path:str):
-        teacher_model_weights = PetModel(self.teacher_model_name)
+        #teacher_model_weights = PetModel(self.teacher_model_name)
         artifact_model = self.logger.download_artifact(artifact=artifact_path)
         teacher_model = LightningTraining.load_from_checkpoint(
             artifact_model#, model=teacher_model_weights

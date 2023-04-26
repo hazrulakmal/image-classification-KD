@@ -17,7 +17,7 @@ trainer:
       id: null
       anonymous: null
       project: image-classification-KD
-      log_model: false
+      log_model: True
       experiment: null
       prefix: ''
       checkpoint_name: null

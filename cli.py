@@ -4,13 +4,13 @@ import os
 
 args = {
     "trainer": {
-        "accelerator": "gpu",
-        "fast_dev_run": False,
+        "accelerator": "cpu",
+        "fast_dev_run": True,
         "logger":{
-            "name": "resnet18-vanilla",
+            "name": "resnet18-vanilla-test",
             "project": "image-classification-KD"
         },
-        "precision": "16",
+        "precision": "32-true",
         "log_every_n_steps": 5,
         #"max_epochs": 2,
     },
@@ -19,6 +19,7 @@ args = {
         "class_path": "src.training.LightningTraining",
         "init_args": {
             "model_name": "resnet18",
+            "dropout_rates": 0.4,
             "learning_rate": 0.01,
             "momentum": 0.9,
             "nesterov": True,
@@ -28,7 +29,7 @@ args = {
     },
 
     "data": {
-        "batch_size": 128,
+        "batch_size": 16,
         "num_workers": os.cpu_count(),
     },
 
@@ -50,5 +51,5 @@ args = {
 }
 
 if __name__ == "__main__":
-    print(watermark(packages="torch,lightning,wandb,torchvision,torchmetrics", python=True))
+    print(watermark(packages="torch,lightning,wandb,torchvision,torchmetrics,jsonargparse", python=True))
     cli_main(args)

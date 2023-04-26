@@ -2,9 +2,9 @@
 #import os
 import wandb
 from watermark import watermark
+import lightning
 from lightning.pytorch.cli import LightningCLI, ArgsType
 from lightning.pytorch.callbacks import ModelCheckpoint
-#from src.utils_helpers import get_secret_keys
 from src.training import LightningTraining, DistilledTraining
 from src.data import PetDataModule
 
@@ -17,13 +17,14 @@ class MyLightningCLI(LightningCLI):
                 "class_path":"lightning.pytorch.loggers.WandbLogger",
                 "init_args": {
                 "job_type": "Train",
+                "log_model": True,
                 }
             }
          })
         
 
 def cli_main(args: ArgsType = None):    
-    cli = MyLightningCLI(
+    cli = LightningCLI(
         model_class=None,
         #model_class=LightningTraining,
         datamodule_class=PetDataModule,
@@ -41,6 +42,13 @@ def cli_main(args: ArgsType = None):
             "enable_checkpointing": True,
             "enable_progress_bar": True,
             "enable_model_summary": True,
+            "logger": {
+                "class_path":"lightning.pytorch.loggers.WandbLogger",
+                "init_args": {
+                "job_type": "Train",
+                "log_model": True,
+                },
+            },
         },
         args=args
         ) #customise run_dev_run, accelerator
@@ -74,7 +82,7 @@ def cli_main(args: ArgsType = None):
     wandb.finish()
     
 # if __name__ == "__main__":
-#     print(watermark(packages="torch,lightning", python=True))
+#     print(watermark(packages="torch,lightning,wandb,torchvision,torchmetrics,jsonargparse", python=True))
 #     cli_main()
     
     
