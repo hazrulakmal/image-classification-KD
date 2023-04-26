@@ -3,7 +3,6 @@ import torch
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import random_split
 from torchvision import datasets, transforms
-from typing import Optional,Tuple
 
 class PetDataModule(L.LightningDataModule):
     def __init__(
@@ -11,10 +10,8 @@ class PetDataModule(L.LightningDataModule):
         data_dir:str="./datasets", 
         batch_size:int=64, 
         num_workers:int=2,
-        height_width: Optional[Tuple]=None, 
         split_size:float=0.80,
         seed:int=42,
-        api_key:str=None,
         test_transform=None,   
         train_transform=None,
         ):
@@ -27,7 +24,6 @@ class PetDataModule(L.LightningDataModule):
         self.test_transform = test_transform
         self.num_workers = num_workers
         self.seed=seed
-        self.api_key = api_key
 
     def prepare_data(self):
         # download (will run once to download the data)

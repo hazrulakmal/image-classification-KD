@@ -24,3 +24,4 @@ breakdown utils_helpers.py into smaller components and move them to src folder
 
 1. you can fill up cli arguments using yaml file or python!
 2. models must met the image preprocessing requirements
+3. best practices for L.LightningModule __init__ method is to create the base model there rather than create it outside and pass it in. This is because the model is a part of the module and should be created in the module.

@@ -1,5 +1,5 @@
 #Dependency Management
 wandb # for tracking experiments
-lightning
+watermark # for printing version info
 torchvision
-pytorch-lightning[extra]
+lightning[extra]
