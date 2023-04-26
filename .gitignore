@@ -4,3 +4,4 @@ datasets
 secrets.json
 image-classification-KD
 cli.py
+artifacts

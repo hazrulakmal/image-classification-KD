@@ -2,7 +2,7 @@ import torch.nn.functional as F
 import lightning as L
 import torch
 import torchmetrics
-import wandb
+from lightning.pytorch.loggers import WandbLogger
 
 class LightningTraining(L.LightningModule):
     def __init__(
@@ -192,14 +192,9 @@ class DistilledTraining(L.LightningModule):
         return new_layers
     
     def _fetch_model_artifact(self, artifact_path:str):
-        #teacher_model_weights = PetModel(self.teacher_model_name)
-        #artifact_model = self.logger.download_artifact(artifact=artifact_path)
-        run = wandb.init(project="download_models", job_type="download_model")
-        artifact = run.use_artifact(artifact_path, type='model')
-        artifact_dir = artifact.download()
-        run.finish() 
+        artifact = WandbLogger.download_artifact(artifact_path)
         teacher_model = LightningTraining.load_from_checkpoint(
-           artifact_dir+"/model.ckpt", model_name=self.hparams.teacher_model_name
+           artifact+"/model.ckpt", model_name=self.hparams.teacher_model_name
         )
         return teacher_model
     

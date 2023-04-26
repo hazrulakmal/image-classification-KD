@@ -37,7 +37,6 @@ class MyLightningCLI(LightningCLI):
 def cli_main(args: ArgsType = None):    
     cli = MyLightningCLI(
         model_class=None,
-        #model_class=LightningTraining,
         datamodule_class=PetDataModule,
         run=False,
         seed_everything_default=42,
