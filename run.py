@@ -1,11 +1,9 @@
 #import sys
 #import os
 import wandb
-#import torch
 from watermark import watermark
 from lightning.pytorch.cli import LightningCLI, ArgsType
 from lightning.pytorch.callbacks import ModelCheckpoint
-#from torchvision.models import ResNet18_Weights
 from src.utils_helpers import get_secret_keys
 from src.training import LightningTraining, DistilledTraining
 from src.data import PetDataModule
