@@ -4,7 +4,7 @@ import wandb
 from watermark import watermark
 from lightning.pytorch.cli import LightningCLI, ArgsType
 from lightning.pytorch.callbacks import ModelCheckpoint
-from src.utils_helpers import get_secret_keys
+#from src.utils_helpers import get_secret_keys
 from src.training import LightningTraining, DistilledTraining
 from src.data import PetDataModule
 
@@ -24,6 +24,7 @@ class MyLightningCLI(LightningCLI):
 
 def cli_main(args: ArgsType = None):    
     cli = MyLightningCLI(
+        model_class=None,
         #model_class=LightningTraining,
         datamodule_class=PetDataModule,
         run=False,
@@ -34,7 +35,7 @@ def cli_main(args: ArgsType = None):
             "callbacks": [ModelCheckpoint(save_top_k=1, mode="max", monitor="val_acc", save_last=False)],
             "deterministic": True,
             "devices": "auto",
-            "precision": "32-true",
+            "precision": "16",
             "log_every_n_steps": 5,
             "val_check_interval": 0.25,
             "enable_checkpointing": True,

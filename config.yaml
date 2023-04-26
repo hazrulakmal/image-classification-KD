@@ -42,7 +42,7 @@ trainer:
       settings: null
   callbacks: null
   fast_dev_run: false
-  max_epochs: 3
+  max_epochs: 2
   min_epochs: null
   max_steps: -1
   min_steps: null
@@ -56,9 +56,9 @@ trainer:
   check_val_every_n_epoch: 1
   num_sanity_val_steps: null
   log_every_n_steps: 5
-  enable_checkpointing: null
-  enable_progress_bar: null
-  enable_model_summary: null
+  enable_checkpointing: true
+  enable_progress_bar: true
+  enable_model_summary: true
   accumulate_grad_batches: 1
   gradient_clip_val: null
   gradient_clip_algorithm: null
@@ -73,15 +73,6 @@ trainer:
   sync_batchnorm: false
   reload_dataloaders_every_n_epochs: 0
   default_root_dir: null
-model:
-  model: null
-  model_name: resnet18
-  num_classes: 37
-  learning_rate: 0.01
-  momentum: 0.9
-  weight_decay: 0.001
-  nesterov: true
-  T_max: 10
 data:
   data_dir: ./datasets
   batch_size: 128
@@ -90,3 +81,14 @@ data:
   seed: 42
   test_transform: null
   train_transform: null
+model:
+  class_path: src.training.LightningTraining
+  init_args:
+    model: null
+    model_name: resnet18
+    num_classes: 37
+    learning_rate: 0.01
+    momentum: 0.9
+    weight_decay: 0.001
+    nesterov: true
+    T_max: 10

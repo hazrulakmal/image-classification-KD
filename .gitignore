@@ -2,5 +2,4 @@ datasets
 *__pycache__
 *wandb
 secrets.json
-cli.py
-*image
+image-classification-KD
