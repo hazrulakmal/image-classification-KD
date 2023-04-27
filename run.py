@@ -43,7 +43,6 @@ def cli_main(args: ArgsType = None):
         save_config_kwargs={"overwrite": True},
         trainer_defaults={
             "max_epochs": 10,
-            #"callbacks": [ModelCheckpoint(save_top_k=1, mode="max", monitor="val_acc", save_last=False)],
             "deterministic": True,
             "devices": "auto",
             "precision": "16",
@@ -52,32 +51,9 @@ def cli_main(args: ArgsType = None):
             "enable_checkpointing": True,
             "enable_progress_bar": True,
             "enable_model_summary": True,
-            # "logger": {
-            #     "class_path":"lightning.pytorch.loggers.WandbLogger",
-            #     "init_args": {
-            #     "job_type": "Train",
-            #     "log_model": True,
-            #     },
-            # },
-            # "callbacks": {
-            #   "class_path": "lightning.pytorch.callbacks.ModelCheckpoint",
-            #   "init_args": {
-            #     "save_top_k":1,
-            #     "mode":"max",
-            #     "monitor":"val_acc",
-            #     "save_last":False,
-            #     },
-            # },
         },
         args=args
         ) #customise run_dev_run, accelerator
-
-    #api_key = get_secret_keys("secrets.json")["wandb"]
-    # try:
-    #     wandb.login(key=cli.datamodule.api_key)
-    #     print("wandb Logged in Successfully")
-    # except TypeError:
-    #     print("wandb Login Failed. Please verify your wandb API key")
 
     if not cli.trainer.fast_dev_run:
         ckpt_path = "best"

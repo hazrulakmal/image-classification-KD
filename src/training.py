@@ -23,8 +23,9 @@ class LightningTraining(L.LightningModule):
 
         if model is None:
             self.model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="DEFAULT")
-            in_features = self.model.fc.in_features
-            self.model.fc = self._add_layers(in_features, int(in_features/2), self.hparams.num_classes, self.hparams.dropout_rates)
+            # in_features = self.model.fc.in_features
+            # self.model.fc = self._add_layers(in_features, int(in_features/2), self.hparams.num_classes, self.hparams.dropout_rates)
+            self.model = replace_classifier(self.model, self.hparams.num_classes, self.hparams.dropout_rates)
         else:
             self.model = model
             
@@ -200,7 +201,39 @@ class DistilledTraining(L.LightningModule):
     
     def _load_model(self, model_name):
         model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="DEFAULT")
-        in_features = model.fc.in_features
-        model.fc = self._add_layers(in_features, int(in_features/2), self.hparams.num_classes, self.hparams.dropout_rates)
+        model= replace_classifier(model, self.hparams.num_classes, self.hparams.dropout_rates)
         return model
+
+#helper function
+def replace_classifier(model, num_classes, dropout_rates):
+    """
+    Replace the classifier head of a model with a sequential layer 
+    with out_features is identical to the number of classes in the dataset.
+    """
+    # Identify the classifier head
+    if hasattr(model, 'fc'):
+        classifier = model.fc
+    elif hasattr(model, 'classifier'):
+        classifier = model.classifier[-1]
+    elif hasattr(model, 'heads'):
+        classifier = model.heads[-1]
+    else:
+        raise ValueError("Could not find classifier head in the model")
+
+    # Replace the classifier 
+    in_features = classifier.in_features
+    new_classifier = torch.nn.Sequential(
+            torch.nn.Linear(in_features, int(in_features/2)),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(dropout_rates),
+            torch.nn.Linear(int(in_features/2), num_classes),
+        )
     
+    if hasattr(model, 'fc'):
+        setattr(model, 'fc', new_classifier)
+    elif hasattr(model, 'classifier'):
+        model.classifier[-1] = new_classifier
+    elif hasattr(model, 'heads'):
+        model.heads[-1] = new_classifier
+
+    return model
