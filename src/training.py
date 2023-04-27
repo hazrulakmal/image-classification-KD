@@ -73,16 +73,7 @@ class LightningTraining(L.LightningModule):
             nesterov=self.hparams.nesterov
         )
         sch = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.hparams.T_max)
-        return [optimizer], [sch]
-    
-    def _add_layers(self, in_features, hidden_units, num_classes, dropout_rates):
-        new_layers = torch.nn.Sequential(
-            torch.nn.Linear(in_features, hidden_units),
-            torch.nn.ReLU(),
-            torch.nn.Dropout(dropout_rates),
-            torch.nn.Linear(hidden_units, num_classes),
-        )
-        return new_layers   
+        return [optimizer], [sch]  
 
 class DistilledTraining(L.LightningModule):
     def __init__(
@@ -183,15 +174,6 @@ class DistilledTraining(L.LightningModule):
         sch = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.hparams.T_max)
         return [optimizer], [sch]
     
-    def _add_layers(self, in_features, hidden_units, num_classes, dropout_rates):
-        new_layers = torch.nn.Sequential(
-            torch.nn.Linear(in_features, hidden_units),
-            torch.nn.ReLU(),
-            torch.nn.Dropout(dropout_rates),
-            torch.nn.Linear(hidden_units, num_classes),
-        )
-        return new_layers
-    
     def _fetch_model_artifact(self, artifact_path:str):
         artifact = WandbLogger.download_artifact(artifact_path)
         teacher_model = LightningTraining.load_from_checkpoint(
@@ -217,6 +199,8 @@ def replace_classifier(model, num_classes, dropout_rates):
         classifier = model.classifier[-1]
     elif hasattr(model, 'heads'):
         classifier = model.heads[-1]
+    elif hasattr(model, 'head'):
+        classifier = model.head[-1]
     else:
         raise ValueError("Could not find classifier head in the model")
 
@@ -235,5 +219,7 @@ def replace_classifier(model, num_classes, dropout_rates):
         model.classifier[-1] = new_classifier
     elif hasattr(model, 'heads'):
         model.heads[-1] = new_classifier
+    elif hasattr(model, 'head'):
+        model.head[-1] = new_classifier
 
     return model
