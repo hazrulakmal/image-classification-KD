@@ -200,7 +200,7 @@ def replace_classifier(model, num_classes, dropout_rates):
     elif hasattr(model, 'heads'):
         classifier = model.heads[-1]
     elif hasattr(model, 'head'):
-        classifier = model.head[-1]
+        classifier = model.head
     else:
         raise ValueError("Could not find classifier head in the model")
 
@@ -220,6 +220,6 @@ def replace_classifier(model, num_classes, dropout_rates):
     elif hasattr(model, 'heads'):
         model.heads[-1] = new_classifier
     elif hasattr(model, 'head'):
-        model.head[-1] = new_classifier
+        setattr(model, 'head', new_classifier)
 
     return model
