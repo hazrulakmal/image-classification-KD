@@ -1,10 +1,13 @@
-import lightning as L
 import torch
+import lightning as L
 from torch.utils.data import DataLoader
-from torch.utils.data.dataset import random_split
 from torchvision import datasets, transforms
+from torch.utils.data.dataset import random_split
 
 class PetDataModule(L.LightningDataModule):
+    """
+    DataModule for creating OxfordIIITPet dataset
+    """
     def __init__(
         self, 
         data_dir:str="./datasets", 
@@ -31,24 +34,13 @@ class PetDataModule(L.LightningDataModule):
 
         # transformations
         if self.train_transform is None:
-            self.train_transform =  transforms.Compose([
-                transforms.Resize(256, interpolation=transforms.InterpolationMode.BILINEAR),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])
-            ])
+            self.train_transform =  self._transform_dataset()
 
         if self.test_transform is None:
-            self.test_transform = transforms.Compose([
-                transforms.Resize(256, interpolation=transforms.InterpolationMode.BILINEAR),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])
-            ])
+            self.test_transform = self._transform_dataset()
 
     def setup(self, stage: str):
+        # Get data from OxfordIIITPet dataset
         self.data_test = datasets.OxfordIIITPet(
             self.data_dir, 
             transform=self.test_transform,
@@ -56,6 +48,7 @@ class PetDataModule(L.LightningDataModule):
             split="test",
         )
 
+        # Split the data into training and validation parts
         data_full = datasets.OxfordIIITPet(
             self.data_dir, 
             transform=self.train_transform, 
@@ -63,6 +56,7 @@ class PetDataModule(L.LightningDataModule):
             split="trainval",
         )
 
+        # Split the training data into training and validation parts
         split_len = int(self.train_size*len(data_full))
         self.data_train, self.data_val = random_split(data_full, 
                                                       [split_len, len(data_full)-split_len], 
@@ -98,3 +92,12 @@ class PetDataModule(L.LightningDataModule):
             num_workers=self.num_workers,
         )
         return test_loader
+    
+    def _transform_dataset(self):
+        return transforms.Compose([
+                transforms.Resize(256, interpolation=transforms.InterpolationMode.BILINEAR),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
+            ])

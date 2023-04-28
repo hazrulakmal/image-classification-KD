@@ -8,6 +8,8 @@ from lightning.pytorch.callbacks import ModelCheckpoint
 from src.training import LightningTraining, DistilledTraining
 from src.data import PetDataModule
 
+### code to integrate CLI into training and evaluation pipeline ### 
+
 class MyLightningCLI(LightningCLI):
     def add_arguments_to_parser(self, parser):
         #parser.add_optimizer_args(torch.optim.SGD)
@@ -53,7 +55,7 @@ def cli_main(args: ArgsType = None):
             "enable_model_summary": True,
         },
         args=args
-        ) #customise run_dev_run, accelerator
+        ) 
 
     if not cli.trainer.fast_dev_run:
         ckpt_path = "best"
@@ -61,18 +63,10 @@ def cli_main(args: ArgsType = None):
         ckpt_path = None
         cli.trainer.logger = None
 
-    #training steps (optimizer, loss, metrics)
-    # lightning_model = LightningTraining(
-    #     model=None, 
-    #     model_name=cli.model.model_name,
-    #     learning_rate=cli.model.hparams.learning_rate,
-    #     momentum=cli.model.hparams.momentum,
-    #     nesterov=cli.model.hparams.nesterov,
-    #     weight_decay=cli.model.hparams.weight_decay,
-    #     T_max=cli.model.hparams.T_max,
-    # )
-
+    #execute training steps (optimizer, loss, metrics)
     cli.trainer.fit(cli.model, datamodule=cli.datamodule)
+
+    #execute testing steps (metrics)
     cli.trainer.test(cli.model, datamodule=cli.datamodule, ckpt_path=ckpt_path)
     wandb.finish()
     

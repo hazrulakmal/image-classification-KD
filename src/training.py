@@ -5,6 +5,9 @@ import torchmetrics
 from lightning.pytorch.loggers import WandbLogger
 
 class LightningTraining(L.LightningModule):
+    """
+    LightningModule for finetuning a vision model
+    """
     def __init__(
         self, 
         model=None, 
@@ -23,8 +26,6 @@ class LightningTraining(L.LightningModule):
 
         if model is None:
             self.model = torch.hub.load('pytorch/vision:v0.13.0', model_name, weights="DEFAULT")
-            # in_features = self.model.fc.in_features
-            # self.model.fc = self._add_layers(in_features, int(in_features/2), self.hparams.num_classes, self.hparams.dropout_rates)
             self.model = replace_classifier(self.model, self.hparams.num_classes, self.hparams.dropout_rates)
         else:
             self.model = model
@@ -45,6 +46,7 @@ class LightningTraining(L.LightningModule):
         return loss, true_labels, predicted_labels
 
     def training_step(self, batch, batch_idx):
+        # run training step
         loss, true_labels, predicted_labels = self._shared_step(batch)
 
         self.log("train_loss", loss, on_epoch=False, on_step=True)
@@ -53,6 +55,7 @@ class LightningTraining(L.LightningModule):
         return loss
 
     def validation_step(self, batch, batch_idx):
+        # run validation step
         loss, true_labels, predicted_labels = self._shared_step(batch)
 
         self.log("val_loss", loss, prog_bar=True)
@@ -60,11 +63,13 @@ class LightningTraining(L.LightningModule):
         self.log("val_acc", self.val_acc, prog_bar=True)
 
     def test_step(self, batch, batch_idx):
+        # run test step
         loss, true_labels, predicted_labels = self._shared_step(batch)
         self.test_acc(predicted_labels, true_labels)
         self.log("test_acc", self.test_acc, on_epoch=True, on_step=False)
 
     def configure_optimizers(self):
+        # define optimizer
         optimizer = torch.optim.SGD(
             self.parameters(), 
             lr=self.hparams.learning_rate,
@@ -72,10 +77,14 @@ class LightningTraining(L.LightningModule):
             weight_decay=self.hparams.weight_decay,
             nesterov=self.hparams.nesterov
         )
+        # define scheduler
         sch = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.hparams.T_max)
         return [optimizer], [sch]  
 
 class DistilledTraining(L.LightningModule):
+    """
+    LightningModule for distilling a vision model
+    """
     def __init__(
         self, 
         model=None,
