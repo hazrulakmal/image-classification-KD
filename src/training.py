@@ -1,7 +1,7 @@
-import torch.nn.functional as F
-import lightning as L
 import torch
 import torchmetrics
+import torch.nn.functional as F
+import lightning as L
 from lightning.pytorch.loggers import WandbLogger
 
 class LightningTraining(L.LightningModule):

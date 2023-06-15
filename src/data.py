@@ -29,7 +29,7 @@ class PetDataModule(L.LightningDataModule):
         self.seed=seed
 
     def prepare_data(self):
-        # download (will run once to download the data)
+        # download (will run once to download the data and save it to the data_dir)
         datasets.OxfordIIITPet(root=self.data_dir,target_types="category", download=True)
 
         # transformations
