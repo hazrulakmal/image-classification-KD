@@ -11,7 +11,7 @@ Deploying large deep models with billions of model parameters to devices with li
 - To build **high velocity**, **versioning** and **robust validation** training pipeline for distillation and fine-tuning.
 
 ## Training Pipeline
-![Training Pipeline Overview](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/training_pipelines.png?raw=true)
+![Training Pipeline Overview](https://github.com/hazrulakmal/image-classification-KDgit/blob/main/asset/training_pipelines.png?raw=true)
 
 This project implements a robust training pipeline that provides a user interface for changing initial variables that control the training procedure, model architectures, and hyperparameters. The pipeline automatically logs all training metrics, such as loss function and accuracy score, to a machine learning experiment tracking software called WandB. This allows us to easily compare and analyze the results of each model afterwards.
 
@@ -27,9 +27,9 @@ A quick summary of the results are as follows:
 - Cross-architecture distillation improves student model performance by [] on average.
 - for same-architecture distillation, the bigger the models, the better the distillation (knowledge transfer) performance but the same cannot be said for cross-architecture distillation
 
-![Same-architecture distillation](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/same_architecture.png?raw=true)
-![Cross-architecture distillation](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/cross_architecture.png?raw=true)
-![All distillation](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/all_distillation.png?raw=true)
+![Same-architecture distillation](https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/same_architecture.png?raw=true)
+![Cross-architecture distillation](https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/cross_architecture.png?raw=true)
+![All distillation](https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/all_distillation.png?raw=true)
 
 ## Installation Guide
 
