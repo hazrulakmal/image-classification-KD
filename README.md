@@ -5,16 +5,31 @@ Using knowledge distillation to improve lightweight vision model performance for
 Deploying large deep models with billions of model parameters to devices with limited resources, such as mobile phones and embedded devices, is challenging due to high computational complexity and large storage requirements. Therefore, we aim to explore knowledge distillation techniques as a means of mitigating this problem by producing lightweight models while maximising their predictive performance for vision classification tasks.
 
 ## Objective 
-- To demonstrate that the quality of student model predictive performance is influenced by the quality of the corresponding teacher model.
-- Perform cross-architecture distillation between the teacher and student models to determine whether distilling models from different architetures would affect the predictive performance.
-- To show inference speed and memory usage improvements gained from distillation.
+- To demonstrate that the quality of student model **predictive performance** is influenced by the quality of the corresponding teacher model.
+- Perform **cross-architecture distillation** between the teacher and student models to determine whether distilling models from different architetures would affect the predictive performance.
+- To show **inference speed** and **memory usage** improvements gained from distillation.
+- To build **high velocity**, **versioning** and **robust validation** training pipeline for distillation and fine-tuning.
+
+## Training Pipeline
+![Training Pipeline Overview](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/training_pipelines.png?raw=true)
 
 This project implements a robust training pipeline that provides a user interface for changing initial variables that control the training procedure, model architectures, and hyperparameters. The pipeline automatically logs all training metrics, such as loss function and accuracy score, to a machine learning experiment tracking software called WandB. This allows us to easily compare and analyze the results of each model afterwards.
 
 The interface enables quick experimentation with different desired training methods, such as distillation or normal fine-tuning. The script then dynamically and automatically executes the training process, making it a seamless experience for training multiple different vision models.
 
-## Results
+this project use Free Cloud GPU resources from Google Colab/Kaggle Notebook to train multiple models in parallel to significantly speed up the time required to train multiple vision models.
 
+## Results
+Results are summarized in public W&B report [here](https://api.wandb.ai/links/st311-project/c9zfjjli)
+
+A quick summary of the results are as follows:
+- Same-architecture Distillation improves student model performance by [] on average.
+- Cross-architecture distillation improves student model performance by [] on average.
+- for same-architecture distillation, the bigger the models, the better the distillation (knowledge transfer) performance but the same cannot be said for cross-architecture distillation
+
+![Same-architecture distillation](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/same_architecture.png?raw=true)
+![Cross-architecture distillation](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/cross_architecture.png?raw=true)
+![All distillation](https://github.com/[hazrulakmal]/[image-classification-KD]/blob/[main]/all_distillation.png?raw=true)
 
 ## Installation Guide
 
