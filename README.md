@@ -23,35 +23,58 @@ this project use Free Cloud GPU resources from Google Colab/Kaggle Notebook to t
 Results are summarized in public W&B report [here](https://api.wandb.ai/links/st311-project/c9zfjjli)
 
 A quick summary of the results are as follows:
-- Same-architecture Distillation improves student model performance by [] on average.
-- Cross-architecture distillation improves student model performance by [] on average.
-- for same-architecture distillation, the bigger the models, the better the distillation (knowledge transfer) performance but the same cannot be said for cross-architecture distillation
+- Same-architecture Distillation improves student model performance by ____ on average.
+- Cross-architecture distillation improves student model performance by ____ on average.
+- for same-architecture distillation, the bigger the models, the better the distillation (knowledge transfer) performance but the same cannot be said for cross-architecture distillation.
 
-![Same-architecture distillation](https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/same_achitecture.png?raw=true)
-![Cross-architecture distillation](https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/cross_architecture.png?raw=true)
-![All distillation](https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/all_distillation.png?raw=true)
+
+### Same-architecture distillation
+<p align="center">
+  <img src="https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/same_achitecture.png?raw=true"/>
+</p>
+
+### Cross-architecture distillation
+<p align="center">
+  <img src="https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/cross_architecture.png?raw=true"/>
+</p>
+
+
+### All distillation
+<p align="center">
+  <img src="https://github.com/hazrulakmal/image-classification-KD/blob/main/asset/all_distillation.png?raw=true" width="630" height="400"/>
+</p>
+
+### Future Improvements
+WIP
+
 
 ## Installation Guide
-
-
+1. [Google Colab](https://colab.research.google.com/drive/1cK5aLZwLVhqwcQX50mAYIH8MrkTG8lXv?usp=sharing)/Kaggle Notebook **(Recommended)**
+    - Open and Copy the notebook in Google Colab/Kaggle Notebook
+    - The notebook
+2. Local Machine
+    - Clone the repository
+    - Install the dependencies by running `pip install -r requirements.txt`
+    - Run the cli.py script
 
 ## Codebase Navigation
 1. Data Preprocessing Steps
     - src -> data.py
 2. Training and Distillation
     - src -> training.py
-    - **LightningTraining** class is for finetuning vision models onto the dataset.
-    - **DistilledTraining** class is for distilling a teacher model into a student model
-    - Distil loss can be found in the training_step method of **DistilledTraining** class
-3. Command Line Interface (CLI)
+    - **LightningTraining** class is for finetuning vision models on dataset.
+    - **DistilledTraining** class is for distilling a teacher model into a student model.
+    - Distil Loss can be found in the *training_step* method of **DistilledTraining** class
+3. Command Line Interface Code (CLI)
     - run.py
-4. Project dependency 
+4. Notebook
+    - notebook -> training+interface.ipynb   
+5. Project dependency 
     - requirements.txt
 
 ## Environment Setup
 - Python version       : 3.10.11
 - IPython version      : 7.34.0
-
 - torch       : 2.0.0+cu118
 - lightning   : 2.0.1.post0
 - wandb       : 0.15.0
