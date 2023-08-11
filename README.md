@@ -49,7 +49,7 @@ WIP
 
 
 ## Installation Guide
-1. Google Colab/Kaggle Notebook **(Recommended)**
+1. [Google Colab](https://colab.research.google.com/drive/1cK5aLZwLVhqwcQX50mAYIH8MrkTG8lXv?usp=sharing)/Kaggle Notebook **(Recommended)**
     - Open and Copy the notebook in Google Colab/Kaggle Notebook
     - The notebook
 2. Local Machine
