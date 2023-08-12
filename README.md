@@ -67,7 +67,7 @@ Since the dataset used in this experiment is small, the results are should be in
 3. Command Line Interface Code (CLI)
     - run.py
 4. Notebook
-    - notebook -> training+interface.ipynb   
+    - notebook -> training_interface.ipynb   
 5. Project dependency 
     - requirements.txt
 

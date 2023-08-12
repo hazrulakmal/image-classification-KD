@@ -1,6 +1,3 @@
-# Jupyter Notebook
-*.ipynb -linguist-detectable
-
 # private keys
 secrets.json
 
