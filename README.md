@@ -45,13 +45,12 @@ A quick summary of the results are as follows:
 </p>
 
 ### Future Improvements
-WIP
-
+Since the dataset used in this experiment is small, the results are should be interpreted with caution. The performance difference between models may caused by randomness rather than the model architecture itself. Therefore, the experiment should be repeated with a larger dataset to obtain more reliable results with higher certainty. However this also means that more computational resources are required to train the models. Future work should also include more experiments with cross-validation for more robust evaluation.
 
 ## Installation Guide
-1. [Google Colab](https://colab.research.google.com/drive/1cK5aLZwLVhqwcQX50mAYIH8MrkTG8lXv?usp=sharing)/Kaggle Notebook **(Recommended)**
-    - Open and Copy the notebook in Google Colab/Kaggle Notebook
-    - The notebook
+1. [Google Colab](https://colab.research.google.com/drive/1cK5aLZwLVhqwcQX50mAYIH8MrkTG8lXv?usp=sharing)/[Kaggle Notebook](https://www.kaggle.com/code/hazrulakmal/improving-lightweight-vision-models-using-knowled/notebook) **(Recommended)**
+    - Open and Copy the notebook
+    - Specify the desired training parameters and run them.
 2. Local Machine
     - Clone the repository
     - Install the dependencies by running `pip install -r requirements.txt`

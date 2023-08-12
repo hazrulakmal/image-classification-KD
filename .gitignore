@@ -1,7 +1,13 @@
+# Jupyter Notebook
+*.ipynb -linguist-detectable
+
+# private keys
+secrets.json
+
+#others
 datasets
 *__pycache__
 *wandb
-secrets.json
 image-classification-KD
 artifacts
 cli.py
